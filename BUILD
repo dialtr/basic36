@@ -9,9 +9,20 @@ cc_library(
   			"@abseil-cpp//absl/status:status",
   			"@abseil-cpp//absl/status:statusor",
         "@abseil-cpp//absl/strings",
-        "@abseil-cpp//absl/container:flat_hash_map",
+				#"@abseil-cpp//absl/container:flat_hash_map",
     ],
 )
+
+cc_library(
+	  name = "token",
+		srcs = ["token.cc"],
+		hdrs = ["token.h"],
+		deps = [
+  			"@abseil-cpp//absl/status:status",
+  			"@abseil-cpp//absl/status:statusor",
+        "@abseil-cpp//absl/strings",
+		],
+);
 
 cc_library(
     name = "lexer",
@@ -19,6 +30,7 @@ cc_library(
     hdrs = ["lexer.h"],
     deps = [
 			  ":file_stream",
+				":token",
         "@abseil-cpp//absl/strings",
         "@abseil-cpp//absl/container:flat_hash_map",
     ],
@@ -30,6 +42,7 @@ cc_binary(
     deps = [
 			  ":file_stream",
         ":lexer",
+				":token",
         "@abseil-cpp//absl/flags:flag",
         "@abseil-cpp//absl/flags:parse",
     ],
@@ -50,7 +63,8 @@ cc_test(
     size = "small",
     srcs = ["file_stream_tests.cc"],
 		data = [
-			"test_data/empty_file.txt",
+			"test_data/empty.txt",
+			"test_data/line_column.txt",
 		],
     deps = [
         ":file_stream",

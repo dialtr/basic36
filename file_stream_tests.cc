@@ -25,11 +25,45 @@ TEST(FileStreamTest, OpenNonexistentFile) {
 
 TEST(FileStreamTest, OpenEmptyFile) {
   auto result =
-      FileStream::Open(MakeTestFilePath("test_data/empty_file.txt").c_str());
+      FileStream::Open(MakeTestFilePath("test_data/empty.txt").c_str());
   ASSERT_TRUE(result.ok()) << result.status();
   FileStream* stream = result.value();
-  EXPECT_THAT(stream->IsOpen(), true);
   EXPECT_THAT(stream->Eof(), true);
+  delete stream;
+}
+
+TEST(FileStreamTest, LineAndColumn) {
+  auto result =
+      FileStream::Open(MakeTestFilePath("test_data/line_column.txt").c_str());
+  ASSERT_TRUE(result.ok()) << result.status();
+  FileStream* stream = result.value();
+
+  // Consume 'a', and expect it on 1,1
+  EXPECT_THAT(stream->Line(), 1);
+  EXPECT_THAT(stream->Column(), 1);
+  char c = stream->Next();  // Consume 'a'
+  EXPECT_THAT(c, 'a');
+
+  // Expect the next char position to be 1,2
+  EXPECT_THAT(stream->Line(), 1);
+  EXPECT_THAT(stream->Column(), 2);
+  c = stream->Next();  // Consume '\n';
+  EXPECT_THAT(c, '\n');
+
+  // Expect that reading \n updated the line, col appropriately.
+  EXPECT_THAT(stream->Line(), 2);
+  EXPECT_THAT(stream->Column(), 1);
+
+  // Read the space
+  c = stream->Next();
+  EXPECT_THAT(c, ' ');
+
+  // Expect 'B' on 2,2
+  EXPECT_THAT(stream->Line(), 2);
+  EXPECT_THAT(stream->Column(), 2);
+  c = stream->Next();
+  EXPECT_THAT(c, 'b');
+
   delete stream;
 }
 

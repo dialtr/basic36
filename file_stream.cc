@@ -15,16 +15,33 @@ absl::StatusOr<FileStream*> FileStream::Open(const std::string& path) {
 
 FileStream::FileStream(std::ifstream&& file) : file_(std::move(file)) {}
 
-bool FileStream::IsOpen() const { return file_.is_open(); }
+int FileStream::Line() const { return line_; }
+
+int FileStream::Column() const { return column_; }
 
 bool FileStream::Eof() const { return file_.eof(); }
 
 char FileStream::Next() {
   char c = 0;
-  if (file_.get(c)) {
-    return c;
+  if (!file_.get(c)) {
+    return 0;
   }
-  return 0;
+  switch (c) {
+    case '\r':
+      column_ = 1;
+      break;
+    case '\n':
+      // For UNIX, we'll assume that newline also resets the "carriage".
+      // TODO(staff): Maybe offer an option for handling newline literally.
+      ++line_;
+      column_ = 1;
+      break;
+    default:
+      // Any other character advances one column.
+      ++column_;
+      break;
+  }
+  return c;
 }
 
 char FileStream::Peek() {
