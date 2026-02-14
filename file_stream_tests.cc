@@ -18,7 +18,7 @@ std::string MakeTestFilePath(const char* relpath) {
 }
 
 TEST(FileStreamTest, OpenNonexistentFile) {
-  absl::StatusOr<FileStream*> result = FileStream::Open(".xyzzy");
+  auto result = FileStream::Open(".xyzzy");
   EXPECT_THAT(result.status(),
               absl_testing::StatusIs(absl::StatusCode::kNotFound));
 }
@@ -27,16 +27,15 @@ TEST(FileStreamTest, OpenEmptyFile) {
   auto result =
       FileStream::Open(MakeTestFilePath("test_data/empty.txt").c_str());
   ASSERT_TRUE(result.ok()) << result.status();
-  FileStream* stream = result.value();
+  auto stream = result.value();
   EXPECT_THAT(stream->Eof(), true);
-  delete stream;
 }
 
 TEST(FileStreamTest, LineAndColumn) {
   auto result =
       FileStream::Open(MakeTestFilePath("test_data/line_column.txt").c_str());
   ASSERT_TRUE(result.ok()) << result.status();
-  FileStream* stream = result.value();
+  auto stream = result.value();
 
   // Consume 'a', and expect it on 1,1
   EXPECT_THAT(stream->Line(), 1);
@@ -63,8 +62,6 @@ TEST(FileStreamTest, LineAndColumn) {
   EXPECT_THAT(stream->Column(), 2);
   c = stream->Next();
   EXPECT_THAT(c, 'b');
-
-  delete stream;
 }
 
 // TEST(FileStreamTest, AssertTrueExample) { EXPECT_TRUE(true); }

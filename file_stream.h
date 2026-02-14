@@ -2,6 +2,7 @@
 #define FILE_STREAM_H_
 
 #include <fstream>
+#include <memory>
 #include <string>
 
 #include "absl/status/statusor.h"
@@ -9,9 +10,15 @@
 #include "stream_interface.h"
 
 class FileStream : public StreamInterface {
- public:
-  static absl::StatusOr<FileStream*> Open(const std::string& path);
+ private:
+  struct Passkey {
+    Passkey() = default;
+  };
 
+ public:
+  static absl::StatusOr<std::shared_ptr<FileStream>> Open(
+      const std::string& path);
+  FileStream(Passkey passkey, std::ifstream&& file);
   ~FileStream() = default;
 
   FileStream(const FileStream&) = delete;
@@ -38,7 +45,6 @@ class FileStream : public StreamInterface {
   char Peek() override;
 
  private:
-  FileStream(std::ifstream&& file);
   std::ifstream file_;
   int line_ = 1;
   int column_ = 1;

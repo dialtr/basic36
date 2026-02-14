@@ -1,19 +1,24 @@
 #include "file_stream.h"
 
+#include <memory>
+
 #include "absl/status/status.h"
 
-absl::StatusOr<FileStream*> FileStream::Open(const std::string& path) {
+absl::StatusOr<std::shared_ptr<FileStream>> FileStream::Open(
+    const std::string& path) {
   std::ifstream file(path.c_str());
   if (!file.is_open()) {
     return absl::NotFoundError("path not found");
   }
-  FileStream* stream = new FileStream(std::move(file));
+  auto stream =
+      std::make_shared<FileStream>(FileStream::Passkey{}, std::move(file));
   // Must Peek() once to set EOF bit iff the file is empty.
   stream->Peek();
   return stream;
 }
 
-FileStream::FileStream(std::ifstream&& file) : file_(std::move(file)) {}
+FileStream::FileStream(Passkey, std::ifstream&& file)
+    : file_(std::move(file)) {}
 
 int FileStream::Line() const { return line_; }
 
