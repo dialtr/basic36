@@ -8,14 +8,7 @@
 #include "file_stream.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
-
-std::string MakeTestFilePath(const char* relpath) {
-  static const char* src_dir = std::getenv("TEST_SRCDIR");
-  static const char* workspace = std::getenv("TEST_WORKSPACE");
-  std::string fullpath = absl::StrCat(src_dir, "/", workspace, "/", relpath);
-  std::cout << fullpath << std::endl;
-  return fullpath;
-}
+#include "test_utility.h"
 
 TEST(FileStreamTest, OpenNonexistentFile) {
   auto result = FileStream::Open(".xyzzy");
