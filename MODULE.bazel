@@ -1,0 +1,15 @@
+module(
+    name = "basic36",
+    version = "1.0.0",
+)
+
+# Abseil C++ LTS (Date-based versioning)
+# 20260107.1 is the latest stable release on the BCR
+bazel_dep(name = "abseil-cpp", version = "20260107.1")
+
+# GoogleTest LTS
+# 1.17.0.bcr.2 is the latest stable release optimized for Bzlmod
+bazel_dep(name = "googletest", version = "1.17.0.bcr.2")
+
+# Recommended for C++ projects to manage toolchains and common rules
+bazel_dep(name = "rules_cc", version = "0.0.17")

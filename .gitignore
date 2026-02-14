@@ -1,0 +1,32 @@
+# --- Bazel specific ---
+# Bazel creates these symlinks in the project root
+/bazel-*
+
+# If you use a custom output base inside the workspace (rare)
+/out/
+
+# --- IDE and Editor specific ---
+# CLion / JetBrains
+.idea/
+cmake-build-*/
+
+# VS Code
+.vscode/
+.history/
+
+# Xcode
+*.xcodeproj/
+*.xcworkspace/
+
+# --- OS specific ---
+.DS_Store
+Thumbs.db
+
+# --- C++ specific ---
+# Though Bazel handles builds, your editor might generate these
+*.o
+*.a
+*.so
+*.dylib
+*.exe
+*.out
