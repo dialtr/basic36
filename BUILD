@@ -49,8 +49,15 @@ cc_test(
     name = "file_stream_tests",
     size = "small",
     srcs = ["file_stream_tests.cc"],
+		data = [
+			"test_data/empty_file.txt",
+		],
     deps = [
         ":file_stream",
+  			"@abseil-cpp//absl/status:status",
+  			"@abseil-cpp//absl/status:status_matchers",
+  			"@abseil-cpp//absl/status:statusor",
+        "@abseil-cpp//absl/strings",
         "@googletest//:gtest_main", 
     ],
 )

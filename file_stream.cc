@@ -2,15 +2,20 @@
 
 #include "absl/status/status.h"
 
-absl::StatusOr<StreamInterface*> FileStream::Open(const std::string& path) {
+absl::StatusOr<FileStream*> FileStream::Open(const std::string& path) {
   std::ifstream file(path.c_str());
   if (!file.is_open()) {
     return absl::NotFoundError("path not found");
   }
-  return new FileStream(std::move(file));
+  FileStream* stream = new FileStream(std::move(file));
+  // Must Peek() once to set EOF bit iff the file is empty.
+  stream->Peek();
+  return stream;
 }
 
 FileStream::FileStream(std::ifstream&& file) : file_(std::move(file)) {}
+
+bool FileStream::IsOpen() const { return file_.is_open(); }
 
 bool FileStream::Eof() const { return file_.eof(); }
 

@@ -10,7 +10,7 @@
 
 class FileStream : public StreamInterface {
  public:
-  static absl::StatusOr<StreamInterface*> Open(const std::string& path);
+  static absl::StatusOr<FileStream*> Open(const std::string& path);
 
   ~FileStream() = default;
 
@@ -18,6 +18,8 @@ class FileStream : public StreamInterface {
   FileStream& operator=(const FileStream&) = delete;
   FileStream(FileStream&&) = delete;
   FileStream& operator=(FileStream&&) = delete;
+
+  bool IsOpen() const;
 
   // StreamInterface
   bool Eof() const override;
