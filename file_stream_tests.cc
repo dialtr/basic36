@@ -27,8 +27,10 @@ TEST(FileStreamTest, OpenEmptyFile) {
   auto result =
       FileStream::Open(MakeTestFilePath("test_data/empty_file.txt").c_str());
   ASSERT_TRUE(result.ok()) << result.status();
-  EXPECT_THAT(result.value()->IsOpen(), true);
-  EXPECT_THAT(result.value()->Eof(), true);
+  FileStream* stream = result.value();
+  EXPECT_THAT(stream->IsOpen(), true);
+  EXPECT_THAT(stream->Eof(), true);
+  delete stream;
 }
 
 // TEST(FileStreamTest, AssertTrueExample) { EXPECT_TRUE(true); }
