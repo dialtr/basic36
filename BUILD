@@ -1,34 +1,56 @@
 load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
 
-# 1. The Core Library
+
 cc_library(
-    name = "lexer",
-    srcs = ["lexer.cc"],
-    hdrs = ["lexer.h"], # Assuming you have a header for the implementation
+    name = "file_stream",
+    srcs = ["file_stream.cc"],
+    hdrs = ["file_stream.h", "stream_interface.h"],
     deps = [
+  			"@abseil-cpp//absl/status:status",
+  			"@abseil-cpp//absl/status:statusor",
         "@abseil-cpp//absl/strings",
         "@abseil-cpp//absl/container:flat_hash_map",
     ],
 )
 
-# 2. The Main Binary
+cc_library(
+    name = "lexer",
+    srcs = ["lexer.cc"],
+    hdrs = ["lexer.h"],
+    deps = [
+			  ":file_stream",
+        "@abseil-cpp//absl/strings",
+        "@abseil-cpp//absl/container:flat_hash_map",
+    ],
+)
+
 cc_binary(
     name = "basic36",
     srcs = ["main.cc"],
     deps = [
+			  ":file_stream",
         ":lexer",
         "@abseil-cpp//absl/flags:flag",
         "@abseil-cpp//absl/flags:parse",
     ],
 )
 
-# 3. The Unit Test
 cc_test(
-    name = "lexer_test",
+    name = "lexer_tests",
     size = "small",
     srcs = ["lexer_tests.cc"],
     deps = [
         ":lexer",
+        "@googletest//:gtest_main", 
+    ],
+)
+
+cc_test(
+    name = "file_stream_tests",
+    size = "small",
+    srcs = ["file_stream_tests.cc"],
+    deps = [
+        ":file_stream",
         "@googletest//:gtest_main", 
     ],
 )
