@@ -20,7 +20,6 @@ cc_library(
   			"@abseil-cpp//absl/status:status",
   			"@abseil-cpp//absl/status:statusor",
         "@abseil-cpp//absl/strings",
-				#"@abseil-cpp//absl/container:flat_hash_map",
     ],
 )
 
@@ -48,7 +47,7 @@ cc_library(
 			  ":file_stream",
 				":token",
         "@abseil-cpp//absl/strings",
-        "@abseil-cpp//absl/container:flat_hash_map",
+				#"@abseil-cpp//absl/container:flat_hash_map",
     ],
 )
 
@@ -58,8 +57,12 @@ cc_test(
     srcs = ["lexer_tests.cc"],
 		data = [ ":test_data" ],
     deps = [
-        ":lexer",
+			  ":lexer",
 				":test_utility",
+  			"@abseil-cpp//absl/status:status",
+  			"@abseil-cpp//absl/status:status_matchers",
+  			"@abseil-cpp//absl/status:statusor",
+        "@abseil-cpp//absl/strings",
         "@googletest//:gtest_main", 
     ],
 )

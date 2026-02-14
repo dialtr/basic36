@@ -1,7 +1,12 @@
+#include "absl/status/status.h"
+#include "absl/status/status_matchers.h"
+#include "absl/status/statusor.h"
 #include "file_stream.h"
+#include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "lexer.h"
 #include "test_utility.h"
+#include "token.h"
 
 TEST(LexerTest, Eof) {
   auto result =
@@ -9,6 +14,8 @@ TEST(LexerTest, Eof) {
   ASSERT_TRUE(result.ok()) << result.status();
   Lexer lexer(result.value());
   ASSERT_TRUE(lexer.Eof());
+  Token token = lexer.Next();
+  EXPECT_THAT(token.Type(), TokenType::kEof);
 }
 
 // TEST(LexerTest, AssertTrueExample) { EXPECT_TRUE(true); }
