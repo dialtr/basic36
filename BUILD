@@ -97,3 +97,19 @@ cc_library(
 		],
 );
 
+cc_test(
+    name = "token_tests",
+    size = "small",
+    srcs = ["token_tests.cc"],
+    deps = [
+			  ":token",
+				":test_utility",
+  			"@abseil-cpp//absl/status:status",
+  			"@abseil-cpp//absl/status:status_matchers",
+  			"@abseil-cpp//absl/status:statusor",
+        "@abseil-cpp//absl/strings",
+        "@googletest//:gtest_main", 
+    ],
+)
+
+

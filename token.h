@@ -4,6 +4,8 @@
 #include <iostream>
 #include <string>
 
+#include "absl/status/statusor.h"
+
 enum class TokenType {
   kEof,
   kLineNumber,
@@ -21,6 +23,16 @@ class Token {
 
   // Return the type.
   TokenType Type() const;
+
+  // Attempts conversion to a double float.
+  // If the number is parsed, but out of range, returns absl::OutOfRangeError
+  // If the number can't be parsed, returns absl::InvalidArgumentError
+  absl::StatusOr<double> AsDouble() const;
+
+  // Attempts conversion to a long integer.
+  // If the number is parsed, but out of range, returns absl::OutOfRangeError
+  // If the number can't be parsed, returns absl::InvalidArgumentError
+  absl::StatusOr<long> AsInteger() const;
 
   // Sets an error on the token.
   void SetError(const std::string& msg);
