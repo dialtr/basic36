@@ -13,26 +13,29 @@ enum class TokenType {
 
 class Token {
  public:
-  Token() : type_(TokenType::kEof) {}
-  Token(TokenType type, const std::string& value)
-      : type_(type), value_(value) {}
-  TokenType Type() const { return type_; }
+  // Construct empty; type will be kEof.
+  Token();
 
-  void SetError(const std::string& msg) {
-    error_ = true;
-    error_message_ = msg;
-  }
+  // Construct with type and value.
+  Token(TokenType type, const std::string& value);
 
-  void ClearError() {
-    error_ = false;
-    error_message_ = "";
-  }
+  // Return the type.
+  TokenType Type() const;
 
-  bool IsError() const { return error_; }
+  // Sets an error on the token.
+  void SetError(const std::string& msg);
 
-  const std::string& ErrorMessage() const { return error_message_; }
+  // Clears error on the token;
+  void ClearError();
 
-  const std::string& Value() const { return value_; }
+  // Returns 'true' if the the token has an error.
+  bool IsError() const;
+
+  // Returns the error message, if present, or empty string if not.
+  const std::string& ErrorMessage() const;
+
+  // Returns the string value of the token.
+  const std::string& Value() const;
 
  private:
   TokenType type_;
@@ -41,27 +44,7 @@ class Token {
   std::string error_message_ = "";
 };
 
-std::ostream& operator<<(std::ostream& os, const Token& token) {
-  os << "{ type: ";
-  switch (token.Type()) {
-    case TokenType::kEof:
-      os << "kEof";
-      break;
-    case TokenType::kLineNumber:
-      os << "kLineNumber";
-      break;
-    case TokenType::kNumber:
-      os << "kNumber";
-      break;
-    case TokenType::kOther:
-      os << "kOther";
-      break;
-  }
-  os << ", value: '" << token.Value() << "'"
-     << ", has_error: " << (token.IsError() ? "true" : "false")
-     << ", error_message: '" << token.ErrorMessage() << "' }";
-
-  return os;
-}
+// Canonical stream insertion operator.
+std::ostream& operator<<(std::ostream& os, const Token& token);
 
 #endif  // TOKEN_H_
