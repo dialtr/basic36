@@ -72,6 +72,7 @@ filegroup(
 		srcs = [
         "test_data/empty.txt",
         "test_data/line_column.txt",
+				"test_data/numbers.txt",
 		],
 		visibility = ["//visibility:public"],
 )

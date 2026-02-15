@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "absl/status/status.h"
 #include "absl/status/status_matchers.h"
 #include "absl/status/statusor.h"
@@ -16,6 +18,17 @@ TEST(LexerTest, Eof) {
   ASSERT_TRUE(lexer.Eof());
   Token token = lexer.Next();
   EXPECT_THAT(token.Type(), TokenType::kEof);
+}
+
+TEST(LexerText, Numbers) {
+  auto result =
+      FileStream::Open(MakeTestFilePath("test_data/numbers.txt").c_str());
+  ASSERT_TRUE(result.ok()) << result.status();
+  Lexer lexer(result.value());
+  while (!lexer.Eof()) {
+    Token token = lexer.Next();
+    std::cout << token << std::endl;
+  }
 }
 
 // TEST(LexerTest, AssertTrueExample) { EXPECT_TRUE(true); }

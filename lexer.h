@@ -23,6 +23,8 @@ class Lexer {
   Token Next();
 
  private:
+  void SkipWhitespace();
+  Token ConsumeNumber();
   std::shared_ptr<StreamInterface> stream_;
 };
 
