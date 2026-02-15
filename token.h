@@ -37,12 +37,12 @@ class Token {
  private:
   TokenType type_;
   std::string value_;
-  bool error_;
-  std::string error_message_;
+  bool error_ = false;
+  std::string error_message_ = "";
 };
 
 std::ostream& operator<<(std::ostream& os, const Token& token) {
-  os << "{ ";
+  os << "{ type: ";
   switch (token.Type()) {
     case TokenType::kEof:
       os << "kEof";
@@ -57,7 +57,10 @@ std::ostream& operator<<(std::ostream& os, const Token& token) {
       os << "kOther";
       break;
   }
-  os << ", '" << token.Value() << "' }";
+  os << ", value: '" << token.Value() << "'"
+     << ", has_error: " << (token.IsError() ? "true" : "false")
+     << ", error_message: '" << token.ErrorMessage() << "' }";
+
   return os;
 }
 

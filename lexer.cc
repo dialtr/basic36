@@ -22,7 +22,7 @@ Token Lexer::Next() {
   // const int start_column = stream_->Column();
 
   const char c = stream_->Peek();
-  if (std::isdigit(c)) {
+  if (std::isdigit(c) || (c == '.')) {
     return ConsumeNumber();
   } else {
     // For now, all others are kOther
@@ -89,6 +89,7 @@ Token Lexer::ConsumeNumber() {
         } else {
           state = kDone;
         }
+        break;
 
       case kReadDecimal:
         if (std::isdigit(peek)) {
@@ -111,6 +112,7 @@ Token Lexer::ConsumeNumber() {
             state = kError;
           }
         }
+        break;
 
       case kReadExponentSign:
         if ((peek == '+') || (peek == '-')) {
@@ -122,6 +124,7 @@ Token Lexer::ConsumeNumber() {
           msg = "malformed number: exponent portion expected after 'E'";
           state = kError;
         }
+        break;
 
       case kReadExponent:
         if (std::isdigit(peek)) {
@@ -135,6 +138,7 @@ Token Lexer::ConsumeNumber() {
             state = kError;
           }
         }
+        break;
 
       default:
         // Do nothing.
